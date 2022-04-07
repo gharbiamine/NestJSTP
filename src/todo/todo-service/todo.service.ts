@@ -6,6 +6,8 @@ import { UpdateTodoDto } from '../DTO/update-todo.dto';
 import { DeleteResult } from 'typeorm/query-builder/result/DeleteResult';
 import { UpdateResult } from 'typeorm/query-builder/result/UpdateResult';
 import { SearchTodoDto } from '../DTO/search-todo.dto';
+import { TodoStatusEnum } from '../Enums/todo-status.enum';
+import { faker } from '@faker-js/faker';
 
 @Injectable()
 export class TodoService {
@@ -16,7 +18,20 @@ export class TodoService {
   addTodo(todo: Partial<TodoEntity>): Promise<TodoEntity> {
     return this.todoRepository.save(todo);
   }
-
+  async generateFakeData(count: number) {
+    const enums = [
+      TodoStatusEnum.actif,
+      TodoStatusEnum.waiting,
+      TodoStatusEnum.done,
+    ];
+    for (let i = 0; i < count; i++) {
+      const todo = new TodoEntity();
+      todo.name = faker.name.firstName();
+      todo.description = faker.lorem.sentence();
+      todo.status = enums[faker.random.number(enums.length - 1)];
+      await this.todoRepository.save(todo);
+    }
+  }
   async updateTodo(
     updateTodoDto: UpdateTodoDto,
     id: string,
