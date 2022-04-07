@@ -69,6 +69,8 @@ export class TodoService {
 
   findAll(searchTodoDto: SearchTodoDto): Promise<TodoEntity[]> {
     const criterias = [];
+    const page = searchTodoDto.page || 1;
+    const offset = searchTodoDto.offset || 5;
     if (searchTodoDto.status) {
       criterias.push({ status: searchTodoDto.status });
     }
@@ -77,7 +79,12 @@ export class TodoService {
       criterias.push({ description: Like(`%${searchTodoDto.criteria}%`) });
     }
     if (criterias.length) {
-      return this.todoRepository.find({ withDeleted: true, where: criterias });
+      return this.todoRepository.find({
+        withDeleted: true,
+        where: criterias,
+        skip: (page - 1) * offset,
+        take: page,
+      });
     }
     return this.todoRepository.find({ withDeleted: true });
   }
