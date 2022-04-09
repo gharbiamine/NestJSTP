@@ -7,6 +7,9 @@ import { MorganModule } from 'nest-morgan';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TodoModule } from './todo/todo.module';
+import { UserModule } from './user/user.module';
+import { CvModule } from './cv/cv.module';
+import { SkillModule } from './skill/skill.module';
 
 @Module({
   imports: [
@@ -27,6 +30,9 @@ import { TodoModule } from './todo/todo.module';
       synchronize: true,
       // debug: true,
     }),
+    UserModule,
+    CvModule,
+    SkillModule,
   ],
   controllers: [AppController],
   providers: [AppService],

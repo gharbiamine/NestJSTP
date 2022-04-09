@@ -98,7 +98,6 @@ export class TodoService {
       criterias.push({ name: Like(`%${searchTodoDto.criteria}%`) });
       criterias.push({ description: Like(`%${searchTodoDto.criteria}%`) });
     }
-    // console.log('criterias', ...criterias);
     if (criterias.length) {
       return this.todoRepository.find({
         withDeleted: true,
