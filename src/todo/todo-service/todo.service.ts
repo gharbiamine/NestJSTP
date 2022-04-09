@@ -69,15 +69,20 @@ export class TodoService {
   }
 
   async getStats(statsTodoDto: StatsTodoDto): Promise<TodoEntity[]> {
-    const start = statsTodoDto.start || '2018-04-15';
-    const end = statsTodoDto.end || '2023-04-15';
-    const result = await this.todoRepository.query(`
-    SELECT status,count(*) as count FROM todo
-    WHERE deletedAt IS NULL
-    AND createdAt BETWEEN '${start}' AND '${end}'
-    GROUP BY status
-    `);
-
+    const start = statsTodoDto.start;
+    const end = statsTodoDto.end;
+    // const result = await this.todoRepository.query(`
+    // SELECT status,count(*) as count FROM todo
+    // WHERE deletedAt IS NULL
+    // AND createdAt BETWEEN '${start}' AND '${end}'
+    // GROUP BY status
+    // `);
+    const result = this.todoRepository
+      .createQueryBuilder()
+      .where(
+        `createdAt BETWEEN '${start.toISOString()}' AND '${end.toISOString()}'`,
+      )
+      .getMany();
     console.log(start, '\n', end);
     return result;
   }

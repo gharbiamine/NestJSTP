@@ -30,7 +30,7 @@ export class TodoDBController {
     return this.todoService.findAll(searchTodoDto);
   }
   @Get('stats')
-  getStats(@Query() statsTodoDto: StatsTodoDto): Promise<TodoEntity[]> {
+  getStats(@Body() statsTodoDto: StatsTodoDto): Promise<TodoEntity[]> {
     return this.todoService.getStats(statsTodoDto);
   }
 
